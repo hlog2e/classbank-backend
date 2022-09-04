@@ -1,0 +1,12 @@
+{
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "helmet": "^5.1.0",
+    "mariadb": "^3.0.1",
+    "morgan": "^1.10.0",
+    "request-ip": "^3.0.2",
+    "sequelize": "^6.21.4"
+  }
+}
