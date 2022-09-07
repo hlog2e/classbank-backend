@@ -11,6 +11,17 @@ app.use(morgan());
 app.use(helmet());
 app.use(cors());
 
+//DB Connect
+const { sequelize } = require("./models");
+sequelize
+  .sync()
+  .then(() => {
+    console.log("DB연결 성공");
+  })
+  .catch((err) => {
+    console.error("DB 연결 오류", err);
+  });
+
 //에러 핸들링
 app.use((req, res, next) => {
   res.status(404).send({ status: 404, message: "올바르지 않은 접근입니다." });
