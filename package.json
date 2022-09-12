@@ -1,12 +1,17 @@
 {
   "dependencies": {
+    "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "dotenv": "^16.0.1",
     "express": "^4.18.1",
     "helmet": "^5.1.0",
+    "jsonwebtoken": "^8.5.1",
+    "moment": "^2.29.4",
     "morgan": "^1.10.0",
     "mysql2": "^2.3.3",
     "request-ip": "^3.0.2",
-    "sequelize": "^6.21.4"
+    "sequelize": "^6.21.4",
+    "solapi": "^5.1.0",
+    "uuid": "^9.0.0"
   }
 }

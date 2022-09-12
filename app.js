@@ -4,12 +4,16 @@ const helmet = require("helmet");
 const morgan = require("morgan");
 const cors = require("cors");
 require("dotenv").config();
+const cookieParser = require("cookie-parser");
+
+const mainRouter = require("./routers");
 
 //express init
 app.use(express.json());
 app.use(morgan());
 app.use(helmet());
 app.use(cors());
+app.use(cookieParser());
 
 //DB Connect
 const { sequelize } = require("./models");
@@ -21,6 +25,8 @@ sequelize
   .catch((err) => {
     console.error("DB 연결 오류", err);
   });
+
+app.use(mainRouter);
 
 //에러 핸들링
 app.use((req, res, next) => {
