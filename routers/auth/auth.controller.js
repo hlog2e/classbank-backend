@@ -85,50 +85,70 @@ module.exports = {
 
     const access_token = signAccess(user_uuid);
     res.cookie("access_token", access_token, {
-      maxAge: 300000,
+      maxAge: 3600, //1시간
       httpOnly: true,
     });
 
     const refresh_token = signRefresh(user_uuid);
     res.cookie("refresh_token", refresh_token, {
-      maxAge: 300000,
+      maxAge: 60 * 60 * 24 * 30 * 12, //360일
       httpOnly: true,
     });
-    return res.json({ status: 200, message: "회원가입 완료" });
+    return res.json({
+      status: 200,
+      message: "회원가입 완료",
+      user_data: {
+        user_uuid: user_data.user_uuid,
+        name: user_data.name,
+        type: user_data.type,
+      },
+    });
   },
 
   login: async (req, res) => {
     const loginData = req.body;
-    const userData = await User.findOne({
+    const user_data = await User.findOne({
       where: { user_id: loginData.user_id },
-    }).catch((err) => {
-      //ID가 존재하지 않는 경우
+    });
+    //ID가 존재하지 않는 경우
+    if (!user_data) {
       return res
         .status(403)
         .json({ status: 403, message: "아이디 또는 비밀번호가 틀렸습니다!" });
-    });
+    }
 
     const passwordValid = await verifyPassword(
       loginData.password,
-      userData.password_salt,
-      userData.password
+      user_data.password_salt,
+      user_data.password
     );
 
     if (passwordValid) {
       // 해시된 비밀번호가 일치하는 경우
       //TODO:여기에 로그인 로그 DB에 생성하는 로직 추가
-      const access_token = signAccess(userData.user_uuid);
+      const access_token = signAccess(user_data.user_uuid);
       res.cookie("access_token", access_token, {
-        maxAge: 300000,
+        maxAge: 3600, //1시간
         httpOnly: true,
       });
 
-      const refresh_token = signRefresh(userData.user_uuid);
+      const refresh_token = await signRefresh(user_data.user_uuid);
       res.cookie("refresh_token", refresh_token, {
-        maxAge: 300000,
+        maxAge: 60 * 60 * 24 * 30 * 12, //360일
         httpOnly: true,
       });
-      return res.json({ status: 200, message: "로그인 성공" });
+
+      console.log(access_token);
+      console.log(refresh_token);
+      return res.json({
+        status: 200,
+        message: "로그인 성공",
+        user_data: {
+          user_uuid: user_data.user_uuid,
+          name: user_data.name,
+          type: user_data.type,
+        },
+      });
     } else {
       // 비밀번호가 일치 하지 않는경우
       return res
