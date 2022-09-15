@@ -10,7 +10,7 @@ module.exports = {
   checkToken: async (req, res, next) => {
     const access_token = verifyAccess(req.cookies.access_token);
     const refresh_token = await verifyRefresh(req.cookies.refresh_token); //refresh는 DB연결 로직때문에 await
-    console.log(refresh_token);
+
     // access_token, refresh_token 모두 존재
     if (access_token && refresh_token) {
       req.isAuth = true;
@@ -19,7 +19,7 @@ module.exports = {
     if (!access_token && !refresh_token) {
       // access_token, refresh_token 모두 만료
       req.isAuth = false;
-      res
+      return res
         .status(401)
         .json({ status: 401, message: "인증정보가 유효하지 않습니다." });
     }
@@ -45,5 +45,8 @@ module.exports = {
       req.isAuth = true;
       next();
     }
+  },
+  checkTeacher: async (req, res, next) => {
+    res.send("is Teacher!");
   },
 };
