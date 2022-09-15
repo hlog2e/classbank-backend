@@ -9,6 +9,20 @@ const password = require("../../utils/password");
 module.exports = {
   join: async (req, res) => {
     const user_data = req.body;
+    if (
+      !user_data.user_id ||
+      !user_data.password ||
+      !user_data.name ||
+      !user_data.phone_number ||
+      !user_data.type ||
+      !user_data.classCode
+    ) {
+      return res.status(400).json({
+        status: 400,
+        message: "가입에 필요한 필수정보가 누락되었습니다.",
+      });
+    }
+
     const user_uuid = uuid.v4();
     //DB에 들어갈 Password 암호화
     const hashedPassword = await password.createHashedPassword(
@@ -58,7 +72,7 @@ module.exports = {
         password_salt: hashedPassword.salt,
         name: user_data.name,
         phone_number: user_data.phone_number,
-        type: user_data.type,
+        type: "teacher",
         bank_uuid: bank_id,
       });
     } else {
@@ -78,7 +92,7 @@ module.exports = {
         password_salt: hashedPassword.salt,
         name: user_data.name,
         phone_number: user_data.phone_number,
-        type: user_data.type,
+        type: "student",
         bank_uuid: bank_info.id,
       });
     }
@@ -107,6 +121,21 @@ module.exports = {
 
   login: async (req, res) => {
     const loginData = req.body;
+    console.log(loginData);
+    //요청 값 유효성 확인
+    if (!loginData.user_id)
+      return res
+        .status(400)
+        .json({ status: 400, message: "ID를 입력해주세요." });
+    if (!loginData.password)
+      return res
+        .status(400)
+        .json({ status: 400, message: "비빌번호를 입력해주세요." });
+    if (!loginData.user_id && !loginData.password)
+      return res
+        .status(400)
+        .json({ status: 400, message: "ID와 비밀번호를 입력해주세요." });
+
     const user_data = await User.findOne({
       where: { user_id: loginData.user_id },
     });
