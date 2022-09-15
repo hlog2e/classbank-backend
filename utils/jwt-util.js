@@ -12,7 +12,7 @@ module.exports = {
 
     return jwt.sign(payload, secret, {
       algorithm: "HS256", // 암호화 알고리즘
-      expiresIn: "10s", // 유효기간
+      expiresIn: "1h", // 유효기간
       subject: "access_token",
       issuer: "classbank.kr",
     });
@@ -21,18 +21,10 @@ module.exports = {
   // access token 검증
   verifyAccess: (_token) => {
     try {
-      const decoded = jwt.verify(_token, secret);
+      return jwt.verify(_token, secret);
     } catch (err) {
-      return {
-        isValid: false,
-        user_id: decoded.user_id,
-      };
+      return null;
     }
-
-    return {
-      isValid: true,
-      user_id: decoded.user_id,
-    };
   },
 
   // refresh token 발급
@@ -66,16 +58,20 @@ module.exports = {
   },
 
   // refresh token 검증
-  verifyRefresh: async (token, userId) => {
+  verifyRefresh: async (_token) => {
     try {
       const decode = jwt.verify(_token, secret);
+      //refresh_token 유효성 검사를 위해 DB쿼리
+      const queryRefresh = await RefreshToken.findOne({
+        where: { token: _token },
+      });
+      //만약 refresh_token이 DB에 없다면 null 리턴
+      if (!queryRefresh) {
+        return null;
+      }
+      return decode;
     } catch (err) {
-      return {
-        isValid: false,
-      };
+      return null;
     }
-    return {
-      isValid: true,
-    };
   },
 };

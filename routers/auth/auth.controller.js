@@ -85,13 +85,13 @@ module.exports = {
 
     const access_token = signAccess(user_uuid);
     res.cookie("access_token", access_token, {
-      maxAge: 3600, //1시간
+      maxAge: 1000 * 60 * 60, //1시간
       httpOnly: true,
     });
 
     const refresh_token = signRefresh(user_uuid);
     res.cookie("refresh_token", refresh_token, {
-      maxAge: 60 * 60 * 24 * 30 * 12, //360일
+      maxAge: 1000 * 60 * 60 * 24 * 30 * 12, //360일
       httpOnly: true,
     });
     return res.json({
@@ -128,13 +128,13 @@ module.exports = {
       //TODO:여기에 로그인 로그 DB에 생성하는 로직 추가
       const access_token = signAccess(user_data.user_uuid);
       res.cookie("access_token", access_token, {
-        maxAge: 3600, //1시간
+        maxAge: 1000 * 60 * 60, //1시간
         httpOnly: true,
       });
 
       const refresh_token = await signRefresh(user_data.user_uuid);
       res.cookie("refresh_token", refresh_token, {
-        maxAge: 60 * 60 * 24 * 30 * 12, //360일
+        maxAge: 1000 * 60 * 60 * 24 * 30 * 12, //360일
         httpOnly: true,
       });
 
