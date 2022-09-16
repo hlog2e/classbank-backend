@@ -12,8 +12,20 @@ const mainRouter = require("./routers");
 app.use(express.json());
 app.use(morgan());
 app.use(helmet());
-app.use(cors());
 app.use(cookieParser());
+//CORS
+const whitelist = ["http://localhost:3000", "https://classbank.kr"];
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (whitelist.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true,
+};
+app.use(cors(corsOptions));
 
 //DB Connect
 const { sequelize } = require("./models");

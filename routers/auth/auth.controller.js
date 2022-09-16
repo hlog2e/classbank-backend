@@ -121,7 +121,6 @@ module.exports = {
 
   login: async (req, res) => {
     const loginData = req.body;
-    console.log(loginData);
     //요청 값 유효성 확인
     if (!loginData.user_id)
       return res
@@ -167,8 +166,6 @@ module.exports = {
         httpOnly: true,
       });
 
-      console.log(access_token);
-      console.log(refresh_token);
       return res.json({
         status: 200,
         message: "로그인 성공",
