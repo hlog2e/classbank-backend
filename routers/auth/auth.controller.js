@@ -15,7 +15,7 @@ module.exports = {
       !user_data.name ||
       !user_data.phone_number ||
       !user_data.type ||
-      !user_data.classCode
+      !user_data.class_code
     ) {
       return res.status(400).json({
         status: 400,
@@ -49,7 +49,7 @@ module.exports = {
           id: bank_id,
           name: "클래스",
           money_name: "원",
-          classCode: user_data.classCode,
+          class_code: user_data.class_code,
           eza: "2",
           eza_term: "7",
           next_eza_date: moment().add(7, "d"),
@@ -60,7 +60,7 @@ module.exports = {
             status: 409,
             message:
               "클래스코드 " +
-              user_data.classCode +
+              user_data.class_code +
               "은(는) 이미 사용중 입니다!",
           });
         }
@@ -78,7 +78,7 @@ module.exports = {
     } else {
       //학생인 경우 DB 생성 로직
       const bank_info = await Bank.findOne({
-        where: { classCode: user_data.classCode },
+        where: { class_code: user_data.class_code },
       });
       if (!bank_info) {
         return res

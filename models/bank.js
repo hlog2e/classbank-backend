@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
       id: { type: DataTypes.STRING, primaryKey: true, allowNull: false },
       name: { type: DataTypes.STRING, allowNull: false },
       money_name: { type: DataTypes.STRING, allowNull: false },
-      classCode: { type: DataTypes.STRING, allowNull: false },
+      class_code: { type: DataTypes.STRING, allowNull: false },
       eza: { type: DataTypes.INTEGER, allowNull: false },
       eza_term: { type: DataTypes.INTEGER, allowNull: false },
       next_eza_date: { type: DataTypes.DATE, allowNull: false },
