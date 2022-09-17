@@ -97,13 +97,13 @@ module.exports = {
       });
     }
 
-    const access_token = signAccess(user_uuid);
+    const access_token = await signAccess(user_uuid);
     res.cookie("access_token", access_token, {
       maxAge: 1000 * 60 * 60, //1시간
       httpOnly: true,
     });
 
-    const refresh_token = signRefresh(user_uuid);
+    const refresh_token = await signRefresh(user_uuid);
     res.cookie("refresh_token", refresh_token, {
       maxAge: 1000 * 60 * 60 * 24 * 30 * 12, //360일
       httpOnly: true,
@@ -154,7 +154,7 @@ module.exports = {
     if (passwordValid) {
       // 해시된 비밀번호가 일치하는 경우
       //TODO:여기에 로그인 로그 DB에 생성하는 로직 추가
-      const access_token = signAccess(user_data.user_uuid);
+      const access_token = await signAccess(user_data.user_uuid);
       res.cookie("access_token", access_token, {
         maxAge: 1000 * 60 * 60, //1시간
         httpOnly: true,

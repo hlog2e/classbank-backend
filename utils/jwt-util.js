@@ -1,13 +1,16 @@
 const jwt = require("jsonwebtoken");
 const secret = process.env.JWT_SECRET;
 
-const { RefreshToken } = require("../models");
+const { RefreshToken, User } = require("../models");
 
 // access_token 발급
 module.exports = {
-  signAccess: (_userUuid) => {
+  signAccess: async (_userUuid) => {
+    const { type } = await User.findOne({ where: { user_uuid: _userUuid } });
+
     const payload = {
       user_id: _userUuid,
+      type: type,
     };
 
     return jwt.sign(payload, secret, {

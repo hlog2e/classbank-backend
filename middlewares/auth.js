@@ -25,7 +25,7 @@ module.exports = {
     }
     //CASE 1: access_token 만료, refresh_token 존재
     if (!access_token) {
-      const new_access_token = signAccess(refresh_token.user_id); //refresh_token payload에 있는 user_id로 access_token 발급
+      const new_access_token = await signAccess(refresh_token.user_id); //refresh_token payload에 있는 user_id로 access_token 발급
       res.cookie("access_token", new_access_token, {
         maxAge: 1000 * 60 * 60, //1시간
         httpOnly: true,
@@ -47,6 +47,14 @@ module.exports = {
     }
   },
   checkTeacher: async (req, res, next) => {
-    res.send("is Teacher!");
+    const { type } = verifyAccess(req.cookies.access_token);
+    if (type === "teacher") {
+      next();
+    } else {
+      return res.status(403).json({
+        status: 403,
+        message: "선생님 회원만 요철할 수 있는 API 입니다.",
+      });
+    }
   },
 };
