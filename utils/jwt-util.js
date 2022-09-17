@@ -9,7 +9,7 @@ module.exports = {
     const { type } = await User.findOne({ where: { user_uuid: _userUuid } });
 
     const payload = {
-      user_id: _userUuid,
+      user_uuid: _userUuid,
       type: type,
     };
 
@@ -33,7 +33,7 @@ module.exports = {
   // refresh token 발급
   signRefresh: async (_userUuid) => {
     const payload = {
-      user_id: _userUuid,
+      user_uuid: _userUuid,
     };
     const refresh_token = jwt.sign(payload, secret, {
       algorithm: "HS256",
