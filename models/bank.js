@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
   }
   Bank.init(
     {
-      id: { type: DataTypes.STRING, primaryKey: true, allowNull: false },
+      id: { type: DataTypes.INTEGER, primaryKey: true, allowNull: false },
       name: { type: DataTypes.STRING, allowNull: false },
       money_name: { type: DataTypes.STRING, allowNull: false },
       class_code: { type: DataTypes.STRING, allowNull: false },
