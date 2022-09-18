@@ -10,5 +10,11 @@ router.get(
   checkTeacher,
   bankController.getBankInfoTeacher
 );
+router.post(
+  "/teacher/info/:updateData",
+  checkToken,
+  checkTeacher,
+  bankController.updateBankInfoTeacher
+);
 
 module.exports = router;
