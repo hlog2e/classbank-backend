@@ -23,6 +23,7 @@ const corsOptions = {
       callback(new Error("Not allowed by CORS"));
     }
   },
+  // origin: "*", //For Postman
   credentials: true,
 };
 app.use(cors(corsOptions));
