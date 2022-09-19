@@ -11,5 +11,11 @@ router.post(
   checkTeacher,
   itemController.postEditItemStatus
 );
+router.post(
+  "/teacher/delete",
+  checkToken,
+  checkTeacher,
+  itemController.postItemDelete
+);
 
 module.exports = router;
