@@ -7,7 +7,14 @@ const purchaseController = require("./purchase.controller");
 router.get(
   "/teacher/pending",
   checkToken,
+  checkTeacher,
   purchaseController.getAllPendingPurchaseTeacher
+);
+router.get(
+  "/teacher/pending/count",
+  checkToken,
+  checkTeacher,
+  purchaseController.getCountPurchasesTeacher
 );
 
 module.exports = router;
