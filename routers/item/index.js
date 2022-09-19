@@ -5,5 +5,11 @@ const router = express.Router();
 const itemController = require("./item.controller");
 
 router.get("/teacher", checkToken, checkTeacher, itemController.getAllItems);
+router.post(
+  "/teacher/status",
+  checkToken,
+  checkTeacher,
+  itemController.postEditItemStatus
+);
 
 module.exports = router;
