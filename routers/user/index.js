@@ -4,6 +4,17 @@ const router = express.Router();
 
 const userController = require("./user.controller");
 
-router.get("/check", checkToken, checkTeacher, userController.helloWorld);
+router.get(
+  "/teacher",
+  checkToken,
+  checkTeacher,
+  userController.getAllUserTeacher
+);
+router.post(
+  "/teacher/info",
+  checkToken,
+  checkTeacher,
+  userController.postEditUserInfoTeacher
+);
 
 module.exports = router;
