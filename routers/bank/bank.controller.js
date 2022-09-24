@@ -63,4 +63,29 @@ module.exports = {
         .json({ status: 400, message: "Bank Info Update를 실패했습니다." });
     }
   },
+
+  getBankInfoStudnet: async (req, res) => {
+    const user_uuid = req.userUUID;
+    const { bank_uuid } = await User.findOne({
+      where: { user_uuid: user_uuid },
+      attributes: ["bank_uuid"],
+    });
+    const bankData = await Bank.findOne({
+      where: { id: bank_uuid },
+      attributes: [
+        "id",
+        "name",
+        "money_name",
+        "eza",
+        "eza_term",
+        "next_eza_date",
+      ],
+    });
+
+    res.json({
+      status: 200,
+      message: "정상 처리되었습니다.",
+      bankData: bankData,
+    });
+  },
 };

@@ -17,4 +17,6 @@ router.post(
   userController.postEditUserInfoTeacher
 );
 
+router.get("/student/info", checkToken, userController.getUserInfoStudnet);
+
 module.exports = router;

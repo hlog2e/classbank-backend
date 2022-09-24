@@ -18,4 +18,10 @@ router.post(
   itemController.postItemDelete
 );
 
+router.post(
+  "/teacher/add",
+  checkToken,
+  checkTeacher,
+  itemController.postItemAdd
+);
 module.exports = router;

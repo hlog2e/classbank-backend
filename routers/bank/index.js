@@ -17,4 +17,6 @@ router.post(
   bankController.updateBankInfoTeacher
 );
 
+router.get("/student/info", checkToken, bankController.getBankInfoStudnet);
+
 module.exports = router;

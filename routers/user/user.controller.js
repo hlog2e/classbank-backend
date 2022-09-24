@@ -9,22 +9,18 @@ module.exports = {
         .json({ status: 400, message: "Bank 정보가 잘못 되었습니다." });
     }
 
-    const userData = await User.findAll(
-      {
-        where: { bank_uuid: bank_id, type: "student" },
-      },
-      {
-        attributes: [
-          "user_uuid",
-          "user_id",
-          "number",
-          "name",
-          "phone_number",
-          "balance",
-          "createdAt",
-        ],
-      }
-    );
+    const userData = await User.findAll({
+      attributes: [
+        "user_uuid",
+        "user_id",
+        "number",
+        "name",
+        "phone_number",
+        "balance",
+        "createdAt",
+      ],
+      where: { bank_uuid: bank_id, type: "student" },
+    });
 
     res.json({ status: 200, message: "정상 처리되었습니다.", users: userData });
   },
@@ -43,5 +39,22 @@ module.exports = {
     ).then(() => {
       res.json({ status: 200, message: "정상 처리되었습니다." });
     });
+  },
+
+  getUserInfoStudnet: async (req, res) => {
+    const user_uuid = req.userUUID;
+
+    const userData = await User.findOne({
+      attributes: [
+        "user_uuid",
+        "user_id",
+        "number",
+        "name",
+        "phone_number",
+        "balance",
+      ],
+      where: { user_uuid: user_uuid },
+    });
+    res.json({ status: 200, message: "정상 처리되었습니다.", user: userData });
   },
 };

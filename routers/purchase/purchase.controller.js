@@ -9,24 +9,20 @@ module.exports = {
         .json({ status: 400, message: "Bank 정보가 잘못 되었습니다." });
     }
 
-    const purchases = await Purchase.findAll(
-      {
-        where: { bank_id: bank_id, status: "pending" },
-      },
-      {
-        attributes: [
-          "id",
-          "buyer_id",
-          "buyer_number",
-          "buyer_name",
-          "item_id",
-          "item_name",
-          "price",
-          "status",
-          "createdAt",
-        ],
-      }
-    );
+    const purchases = await Purchase.findAll({
+      where: { bank_id: bank_id, status: "pending" },
+      attributes: [
+        "id",
+        "buyer_id",
+        "buyer_number",
+        "buyer_name",
+        "item_id",
+        "item_name",
+        "price",
+        "status",
+        "createdAt",
+      ],
+    });
 
     res.json({
       status: 200,
@@ -42,14 +38,10 @@ module.exports = {
         .json({ status: 400, message: "Bank 정보가 잘못 되었습니다." });
     }
 
-    const purchases = await Purchase.findAll(
-      {
-        where: { bank_id: bank_id, status: "pending" },
-      },
-      {
-        attributes: ["id"],
-      }
-    );
+    const purchases = await Purchase.findAll({
+      where: { bank_id: bank_id, status: "pending" },
+      attributes: ["id"],
+    });
 
     res.json({
       status: 200,
