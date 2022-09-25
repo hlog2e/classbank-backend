@@ -39,4 +39,8 @@ router.post(
   itemController.postItemDeny
 );
 
+// 여기부터 밑에는 학생
+
+router.get("/student", checkToken, itemController.getSaleItemsStudent);
+
 module.exports = router;

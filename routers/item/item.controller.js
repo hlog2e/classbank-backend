@@ -146,4 +146,27 @@ module.exports = {
       message: item_data.item_name + " 구입을 거절하였습니다.",
     });
   },
+
+  // 여기부터 밑에는 학생
+
+  getSaleItemsStudent: async (req, res) => {
+    const bank_id = req.query.bank_id;
+
+    if (!bank_id) {
+      return res
+        .status(400)
+        .json({ status: 400, message: "Bank 정보가 잘못 되었습니다." });
+    }
+
+    const onSaleItems = await Item.findAll({
+      where: { bank_id: bank_id, status: "onsale" },
+      attributes: ["id", "name", "desc", "price"],
+    });
+
+    res.json({
+      status: 200,
+      message: "정상 처리되었습니다.",
+      items: onSaleItems,
+    });
+  },
 };

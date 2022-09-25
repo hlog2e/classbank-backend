@@ -16,5 +16,16 @@ router.get(
   checkTeacher,
   purchaseController.getCountPurchasesTeacher
 );
+//밑에부터는 학생 라우터
+
+router.get(
+  "/student/pending",
+  checkToken,
+  purchaseController.getPendingPurchaseStudent
+);
+
+router.post("/student/new", checkToken, purchaseController.createNewPurchase);
+
+router.post("/student/cancel", checkToken, purchaseController.cancelPurchase);
 
 module.exports = router;
