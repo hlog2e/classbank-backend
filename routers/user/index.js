@@ -16,7 +16,13 @@ router.post(
   checkTeacher,
   userController.postEditUserInfoTeacher
 );
-
+//여기서부터는 학생
 router.get("/student/info", checkToken, userController.getUserInfoStudnet);
+
+router.get(
+  "/student/same-bank",
+  checkToken,
+  userController.getSameBankStudents
+);
 
 module.exports = router;

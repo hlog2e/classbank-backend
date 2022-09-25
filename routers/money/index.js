@@ -11,4 +11,12 @@ router.post(
   moneyController.changeBalanceTeacher
 );
 
+//아래부터는 학생
+
+router.post(
+  "/student/send-money",
+  checkToken,
+  moneyController.sendMoneyStudnet
+);
+
 module.exports = router;

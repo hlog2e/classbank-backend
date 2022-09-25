@@ -1,4 +1,5 @@
 const { User } = require("../../models");
+const { Op } = require("sequelize");
 
 module.exports = {
   getAllUserTeacher: async (req, res) => {
@@ -57,5 +58,28 @@ module.exports = {
       where: { user_uuid: user_uuid },
     });
     res.json({ status: 200, message: "정상 처리되었습니다.", user: userData });
+  },
+
+  getSameBankStudents: async (req, res) => {
+    const user_uuid = req.userUUID;
+
+    const { bank_uuid } = await User.findOne({
+      where: { user_uuid: user_uuid },
+    });
+
+    const students = await User.findAll({
+      where: {
+        user_uuid: { [Op.ne]: user_uuid }, // 자기 자신을 제외한 학급 학생들 쿼리
+        bank_uuid: bank_uuid,
+        type: "student",
+      },
+      attributes: ["user_uuid", "number", "name"],
+    });
+
+    res.json({
+      status: 200,
+      message: "정상 처리되었습니다.",
+      students: students,
+    });
   },
 };

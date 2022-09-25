@@ -63,4 +63,48 @@ module.exports = {
       });
     }
   },
+
+  sendMoneyStudnet: async (req, res) => {
+    const sender_id = req.userUUID;
+    const receiver_id = req.body.receiver_id;
+    const amount = req.body.amount;
+
+    console.log(sender_id);
+    console.log(receiver_id);
+    console.log(amount);
+    const userData = await User.findOne({
+      where: { user_uuid: sender_id },
+    });
+
+    if (amount > userData.balance) {
+      return res.status(400).json({
+        status: 400,
+        message: "송금할 금액이 출금 가능 금액보다 큽니다.",
+      });
+    }
+
+    await userData.increment({ balance: -amount });
+
+    await User.increment(
+      { balance: amount },
+      { where: { user_uuid: receiver_id } }
+    );
+
+    await BalanceLog.create({
+      sender_id: sender_id,
+      receiver_id: receiver_id,
+      type: "minus",
+      amount: amount,
+      reason: "송금하기",
+    });
+
+    return res.json({
+      status: 200,
+      message:
+        userData.number +
+        " " +
+        userData.name +
+        "님 에게 송금을 성공하였습니다!",
+    });
+  },
 };
