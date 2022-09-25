@@ -1,4 +1,4 @@
-const { Item } = require("../../models");
+const { Item, User, BalanceLog, Purchase } = require("../../models");
 const uuid = require("uuid");
 
 module.exports = {
@@ -86,6 +86,64 @@ module.exports = {
         price: newItem.price,
         status: newItem.status,
       },
+    });
+  },
+
+  postItemAllow: async (req, res) => {
+    const teacher_uuid = req.userUUID;
+    const item_data = req.body.item_data;
+
+    const userData = await User.findOne({
+      where: { user_uuid: item_data.buyer_id },
+    });
+
+    if (userData.balance < item_data.price) {
+      return res.status(400).json({
+        status: 400,
+        message:
+          userData.number +
+          " " +
+          userData.name +
+          " 학생의 잔고가 부족하여 " +
+          '"' +
+          item_data.item_name +
+          '"' +
+          " 구매를 진행할 수 없습니다.",
+      });
+    } else {
+      await userData.increment({ balance: -item_data.price });
+      await BalanceLog.create({
+        sender_id: teacher_uuid,
+        receiver_id: item_data.buyer_id,
+        type: "minus",
+        amount: item_data.price,
+        reason: item_data.item_name + " 구입",
+      });
+      await Purchase.update(
+        { status: "allow" },
+        { where: { id: item_data.id } }
+      );
+      return res.json({
+        status: 200,
+        message:
+          userData.number +
+          " " +
+          userData.name +
+          " 학생의 " +
+          '"' +
+          item_data.item_name +
+          '"' +
+          " 구입이 승인되었습니다.",
+      });
+    }
+  },
+
+  postItemDeny: async (req, res) => {
+    const item_data = req.body.item_data;
+    await Purchase.update({ status: "deny" }, { where: { id: item_data.id } });
+    res.json({
+      status: 200,
+      message: item_data.item_name + " 구입을 거절하였습니다.",
     });
   },
 };

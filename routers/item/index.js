@@ -24,4 +24,19 @@ router.post(
   checkTeacher,
   itemController.postItemAdd
 );
+
+router.post(
+  "/teacher/allow",
+  checkToken,
+  checkTeacher,
+  itemController.postItemAllow
+);
+
+router.post(
+  "/teacher/deny",
+  checkToken,
+  checkTeacher,
+  itemController.postItemDeny
+);
+
 module.exports = router;
