@@ -1,4 +1,4 @@
-const { User, Bank } = require("../../models");
+const { User, Bank, RefreshToken } = require("../../models");
 const { signAccess, signRefresh } = require("../../utils/jwt-util");
 const { verifyPassword } = require("../../utils/password");
 const uuid = require("uuid");
@@ -181,5 +181,16 @@ module.exports = {
         .status(403)
         .json({ status: 403, message: "아이디 또는 비밀번호가 틀렸습니다!" });
     }
+  },
+  logout: async (req, res) => {
+    const user_uuid = req.userUUID;
+    console.log(user_uuid);
+
+    await RefreshToken.update({ token: "" }, { where: { issuer: user_uuid } });
+
+    res.clearCookie("refresh_token");
+    res.clearCookie("access_token");
+
+    res.json({ status: 200, message: "성공적으로 로그아웃 하였습니다." });
   },
 };

@@ -19,6 +19,7 @@ module.exports = {
         "balance",
         "createdAt",
       ],
+      order: [["number", "ASC"]],
       where: { bank_uuid: bank_id, type: "student" },
     });
 

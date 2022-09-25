@@ -56,7 +56,7 @@ module.exports = {
     } else {
       return res.status(403).json({
         status: 403,
-        message: "선생님 회원만 요철할 수 있는 API 입니다.",
+        message: "선생님 회원만 요청할 수 있는 API 입니다.",
       });
     }
   },

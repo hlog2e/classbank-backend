@@ -22,6 +22,7 @@ module.exports = (sequelize, DataTypes) => {
       phone_number: { type: DataTypes.STRING, allowNull: false },
       type: { type: DataTypes.STRING, allowNull: false },
       bank_uuid: { type: DataTypes.STRING, allowNull: false },
+      balance: { type: DataTypes.INTEGER, allowNull: false },
     },
     {
       sequelize,
