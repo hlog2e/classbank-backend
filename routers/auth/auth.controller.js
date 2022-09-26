@@ -74,6 +74,7 @@ module.exports = {
         phone_number: user_data.phone_number,
         type: "teacher",
         bank_uuid: bank_id,
+        balance: 0,
       });
     } else {
       //학생인 경우 DB 생성 로직
