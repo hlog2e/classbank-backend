@@ -76,6 +76,17 @@ module.exports = {
     const receiver_id = req.body.receiver_id;
     const amount = req.body.amount;
 
+    if (!receiver_id) {
+      return res
+        .status(400)
+        .json({ status: 400, message: "받는 사람이 선택되지 않았습니다." });
+    }
+    if (!amount) {
+      return res
+        .status(400)
+        .json({ status: 400, message: "금액이 입력되지 않았습니다." });
+    }
+
     console.log(sender_id);
     console.log(receiver_id);
     console.log(amount);
@@ -95,6 +106,7 @@ module.exports = {
     const receiver = await User.findOne({
       where: { user_uuid: receiver_id },
     });
+    console.log(receiver);
     await receiver.increment({ balance: amount });
 
     await BalanceLog.create({
