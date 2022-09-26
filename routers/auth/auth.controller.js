@@ -95,6 +95,7 @@ module.exports = {
         phone_number: user_data.phone_number,
         type: "student",
         bank_uuid: bank_info.id,
+        balance: 0,
       });
     }
 
