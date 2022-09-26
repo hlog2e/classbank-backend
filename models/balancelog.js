@@ -13,9 +13,11 @@ module.exports = (sequelize, DataTypes) => {
   }
   BalanceLog.init(
     {
+      id: { type: DataTypes.INTEGER, primaryKey: true },
       sender_id: DataTypes.STRING,
+      sender_name: DataTypes.STRING,
       receiver_id: DataTypes.STRING,
-      type: DataTypes.STRING,
+      receiver_name: DataTypes.STRING,
       amount: DataTypes.INTEGER,
       reason: DataTypes.STRING,
     },

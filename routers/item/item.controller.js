@@ -93,6 +93,10 @@ module.exports = {
     const teacher_uuid = req.userUUID;
     const item_data = req.body.item_data;
 
+    const teacherData = await User.findOne({
+      where: { user_uuid: teacher_uuid },
+    });
+
     const userData = await User.findOne({
       where: { user_uuid: item_data.buyer_id },
     });
@@ -113,9 +117,10 @@ module.exports = {
     } else {
       await userData.increment({ balance: -item_data.price });
       await BalanceLog.create({
-        sender_id: teacher_uuid,
-        receiver_id: item_data.buyer_id,
-        type: "minus",
+        sender_id: item_data.buyer_id,
+        sender_name: userData.name,
+        receiver_id: teacher_uuid,
+        receiver_name: teacherData.name,
         amount: item_data.price,
         reason: item_data.item_name + " 구입",
       });

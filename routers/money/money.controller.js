@@ -15,6 +15,11 @@ module.exports = {
         .status(400)
         .json({ status: 400, message: "필수 입력 정보가 누락되었습니다." });
     }
+
+    const teacherData = await User.findOne({
+      where: { user_uuid: teacher_uuid },
+    });
+
     //회수하기
     if (type === "minus") {
       const userData = await User.findOne({
@@ -31,9 +36,10 @@ module.exports = {
       await userData.increment({ balance: -amount });
 
       await BalanceLog.create({
-        sender_id: teacher_uuid,
-        receiver_id: student_uuid,
-        type: type,
+        sender_id: student_uuid,
+        sender_name: userData.name,
+        receiver_id: teacher_uuid,
+        receiver_name: teacherData.name,
         amount: amount,
         reason: reason,
       });
@@ -51,8 +57,9 @@ module.exports = {
       await userData.increment({ balance: amount });
       await BalanceLog.create({
         sender_id: teacher_uuid,
+        sender_name: teacherData.name,
         receiver_id: student_uuid,
-        type: type,
+        receiver_name: userData.name,
         amount: amount,
         reason: reason,
       });
@@ -85,15 +92,16 @@ module.exports = {
 
     await userData.increment({ balance: -amount });
 
-    await User.increment(
-      { balance: amount },
-      { where: { user_uuid: receiver_id } }
-    );
+    const receiver = await User.findOne({
+      where: { user_uuid: receiver_id },
+    });
+    await receiver.increment({ balance: amount });
 
     await BalanceLog.create({
       sender_id: sender_id,
+      sender_name: userData.name,
       receiver_id: receiver_id,
-      type: "minus",
+      receiver_name: receiver.name,
       amount: amount,
       reason: "송금하기",
     });
