@@ -109,9 +109,9 @@ module.exports = {
     return res.json({
       status: 200,
       message:
-        userData.number +
+        receiver.number +
         " " +
-        userData.name +
+        receiver.name +
         "님 에게 송금을 성공하였습니다!",
     });
   },
