@@ -10,6 +10,10 @@ const purchaseRouter = require("./purchase");
 const moneyRouter = require("./money");
 const logRouter = require("./log");
 
+router.get("/", (req, res) => {
+  res.json({ status: 200, message: "Welcome to CLASSBANK Backend Server!" });
+});
+
 router.use("/auth", authRouter);
 router.use("/user", userRouter);
 router.use("/bank", bankRouter);
