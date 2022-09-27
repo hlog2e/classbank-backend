@@ -26,6 +26,13 @@ const corsOptions = {
   // origin: "*", //For Postman
   credentials: true,
 };
+
+//For Uptime Checker
+app.get("/", (req, res) => {
+  res.json({ status: 200, message: "Welcome to CLASSBANK Backend" });
+});
+
+// CORS 이슈로 Uptime Checker 전에 / 라우트 전달
 app.use(cors(corsOptions));
 
 //DB Connect
