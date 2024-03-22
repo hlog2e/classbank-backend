@@ -64,14 +64,14 @@ module.exports = {
   verifyRefresh: async (_token) => {
     try {
       const decode = jwt.verify(_token, secret);
-      //refresh_token 유효성 검사를 위해 DB쿼리
-      const queryRefresh = await RefreshToken.findOne({
-        where: { token: _token },
-      });
-      //만약 refresh_token이 DB에 없다면 null 리턴
-      if (!queryRefresh) {
-        return null;
-      }
+      // //refresh_token 유효성 검사를 위해 DB쿼리
+      // const queryRefresh = await RefreshToken.findOne({
+      //   where: { token: _token },
+      // });
+      // //만약 refresh_token이 DB에 없다면 null 리턴
+      // if (!queryRefresh) {
+      //   return null;
+      // }
       return decode;
     } catch (err) {
       return null;
