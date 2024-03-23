@@ -147,6 +147,39 @@ module.exports = {
         .json({ status: 403, message: "아이디 또는 비밀번호가 틀렸습니다!" });
     }
 
+    //비밀번호가 초기화된 상태일 경우 해시값 대조 건너뛰고 로그인 처리
+    if (user_data.password_change_required) {
+      if (loginData.password !== user_data.password) {
+        return res
+          .status(403)
+          .json({ status: 403, message: "아이디 또는 비밀번호가 틀렸습니다!" });
+      }
+
+      const access_token = await signAccess(user_data.user_uuid);
+      res.cookie("access_token", access_token, {
+        maxAge: 1000 * 60 * 60, //1시간
+        httpOnly: true,
+      });
+
+      const refresh_token = await signRefresh(user_data.user_uuid);
+      res.cookie("refresh_token", refresh_token, {
+        maxAge: 1000 * 60 * 60 * 24 * 30 * 12, //360일
+        httpOnly: true,
+      });
+
+      return res.json({
+        status: 200,
+        message: "로그인 성공",
+        user_data: {
+          user_uuid: user_data.user_uuid,
+          name: user_data.name,
+          type: user_data.type,
+          user_id: user_data.user_id,
+          password_change_required: user_data.password_change_required,
+        },
+      });
+    }
+
     const passwordValid = await verifyPassword(
       loginData.password,
       user_data.password_salt,
@@ -175,6 +208,8 @@ module.exports = {
           user_uuid: user_data.user_uuid,
           name: user_data.name,
           type: user_data.type,
+          user_id: user_data.user_id,
+          password_change_required: user_data.password_change_required,
         },
       });
     } else {
@@ -194,5 +229,40 @@ module.exports = {
     res.clearCookie("access_token");
 
     res.json({ status: 200, message: "성공적으로 로그아웃 하였습니다." });
+  },
+  changeStudentPassword: async (req, res) => {
+    const userUUID = req.userUUID;
+    const { oldPassword, newPassword } = req.body;
+
+    const userData = await User.findOne({ where: { user_uuid: userUUID } });
+
+    if (!userData.password_change_required) {
+      return res.status(403).json({
+        status: 403,
+        message: "비밀번호를 변경할 권한이 없습니다.",
+      });
+    }
+
+    if (userData.password !== oldPassword) {
+      return res.status(403).json({
+        status: 403,
+        message: "이전 비밀번호가 일치하지 않습니다.",
+      });
+    }
+
+    const hashedPassword = await password.createHashedPassword(newPassword);
+    await User.update(
+      {
+        password: hashedPassword.hashedPassword,
+        password_salt: hashedPassword.salt,
+        password_change_required: false,
+      },
+      { where: { user_uuid: userUUID } }
+    );
+
+    return res.json({
+      status: 200,
+      message: "정상 처리되었습니다.",
+    });
   },
 };

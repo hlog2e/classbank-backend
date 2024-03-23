@@ -17,6 +17,10 @@ module.exports = (sequelize, DataTypes) => {
       user_id: { type: DataTypes.STRING, allowNull: false },
       password: { type: DataTypes.STRING, allowNull: false },
       password_salt: { type: DataTypes.STRING, allowNull: false },
+      password_change_required: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+      },
       number: { type: DataTypes.STRING, allowNull: true },
       name: { type: DataTypes.STRING, allowNull: false },
       phone_number: { type: DataTypes.STRING, allowNull: false },
