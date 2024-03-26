@@ -25,4 +25,18 @@ router.get(
   userController.getSameBankStudents
 );
 
+router.post(
+  "/teacher/reset-password",
+  checkToken,
+  checkTeacher,
+  userController.passwordResetByTeacher
+);
+
+router.post(
+  "/teacher/delete-student",
+  checkToken,
+  checkToken,
+  userController.deleteUserByTeahcer
+);
+
 module.exports = router;

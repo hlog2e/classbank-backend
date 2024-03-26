@@ -1,4 +1,4 @@
-const { User } = require("../../models");
+const { User, Bank } = require("../../models");
 const { Op } = require("sequelize");
 
 module.exports = {
@@ -80,6 +80,44 @@ module.exports = {
       status: 200,
       message: "정상 처리되었습니다.",
       students: students,
+    });
+  },
+
+  passwordResetByTeacher: async (req, res) => {
+    const teacherId = req.userUUID;
+    const { studentId } = req.body;
+
+    const { bank_uuid } = await User.findOne({
+      where: {
+        user_uuid: teacherId,
+      },
+    });
+
+    const { class_code } = await Bank.findOne({ where: { id: bank_uuid } });
+
+    await User.update(
+      {
+        password: class_code,
+        password_salt: "",
+        password_change_required: true,
+      },
+      { where: { user_uuid: studentId } }
+    );
+
+    res.json({
+      status: 200,
+      message: `비밀번호가 "${class_code}"로 초기화 되었습니다!"`,
+    });
+  },
+
+  deleteUserByTeahcer: async (req, res) => {
+    const { studentId } = req.body;
+
+    await User.destroy({ where: { user_uuid: studentId } });
+
+    res.json({
+      status: 200,
+      message: "정상적으로 탈퇴 처리되었습니다.",
     });
   },
 };
