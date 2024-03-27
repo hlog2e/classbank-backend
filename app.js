@@ -5,14 +5,30 @@ const morgan = require("morgan");
 const cors = require("cors");
 require("dotenv").config();
 const cookieParser = require("cookie-parser");
+const moment = require("moment");
 
 const mainRouter = require("./routers");
 
 //express init
 app.use(express.json());
-app.use(morgan());
 app.use(helmet());
 app.use(cookieParser());
+
+morgan.token("auth-token", (req, res) => {
+  return JSON.stringify(req.headers.authorization);
+});
+morgan.token("ko-datetime", (req, res) => {
+  return moment().format("YYYY-MM-DD hh:mm:ss.SSS A Z");
+});
+morgan.token("req-body", (req, res) => {
+  return JSON.stringify(req.body);
+});
+
+app.use(
+  morgan(
+    '[IP : :remote-addr] [:ko-datetime] [:method|HTTP/:http-version|":url"|:status] [Agent:":user-agent"] [Authorization: :auth-token] [Body: :req-body] [res-length::res[content-length] referrer:":referrer"]'
+  )
+);
 //CORS
 const whitelist = ["http://localhost:3000", "https://classbank.kr"];
 const corsOptions = {
